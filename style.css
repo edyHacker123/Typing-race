@@ -75,3 +75,11 @@ textarea{
     height: 100px;
     resize: none;
 }
+h2{
+    position:absolute;
+    top:40px;
+    font-size: 30px;
+}
+.timer {
+    display: inline;
+}
