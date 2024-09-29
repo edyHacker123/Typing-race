@@ -83,3 +83,25 @@ h2{
 .timer {
     display: inline;
 }
+h1{
+   display: none;
+   position: absolute;
+   margin-bottom: 200px;
+   font-size: 60px;
+}
+.try_again{
+   display: none;
+   position: absolute;
+   font-size: 20px;
+   padding: 10px;
+   font-weight: 600;
+   background-color: lightgreen;
+   border: none;
+   border-radius: 10px;
+   cursor:pointer;
+   color:white;
+   transition: font-size 0.5s;
+}
+.try_again:hover {
+    font-size: 30px;
+}

@@ -4,11 +4,17 @@ const car = document.querySelector(".car");
 const gameText = document.querySelector(".text-wrapper");
 const timer = document.querySelector(".timer");
 const textArea = document.querySelector("textarea");
+const title = document.querySelector("h1");
+const tryAgain = document.querySelector(".try_again");
+const h2 = document.querySelector("h2");
 let x = true;
 let textSplitArray;
 let lettersArray;
 let k = 0;
 let completeText = "";
+let skip = 0;
+let steps = 0;
+car.style.left = "50px";
 
 const textArray = [
   "Advantage old had otherwise sincerity dependent additions. It in adapted natural hastily is justice. Six draw you him full not mean evil. Prepare garrets it expense windows shewing do an. She projection advantages resolution son indulgence. Part sure on no long life am at ever. In songs above he as drawn to. Gay was outlived peculiar rendered led six.",
@@ -21,7 +27,7 @@ const textArray = [
 startBtn.addEventListener("click", () => {
   startLayout.style.display = "none";
   textSplitArray = textArray[Math.floor(Math.random() * 5)].split("");
-
+  steps = 800 / textSplitArray.length;
   for (let i = 0; i < textSplitArray.length; i++) {
     const span = document.createElement("span");
     span.innerHTML = textSplitArray[i];
@@ -33,38 +39,58 @@ textArea.addEventListener("keydown", (event) => {
   if (x === true) {
     lettersArray = document.querySelectorAll("span");
     x = false;
-    for (let i = 0; i <= 60; i++) {
+    for (let i = 0; i < 60; i++) {
       setTimeout(() => {
         timer.innerHTML = i;
       }, 1000 * i);
     }
   }
+  setTimeout(() => {
+    title.style.display = "flex";
+    tryAgain.style.display = "flex";
+    textArea.style.display = "none";
+    gameText.style.display = "none";
+    car.style.display = "none";
+    h2.style.display = "none";
+    if (k === textSplitArray.length) {
+      title.innerHTML = "You win";
+    } else {
+      title.innerHTML = "You lose";
+    }
+  }, 60000);
 
   if (event.key === textSplitArray[k]) {
+    car.style.left = parseInt(car.style.left) + steps + "px";
     lettersArray[k].style.color = "lightgreen";
     completeText = completeText + event.key;
     k++;
+  } else if (event.key.length === 1) {
+    skip++;
   }
 
-  if (
-    event.key === "Backspace" &&
-    completeText[k - 1] === textSplitArray[k - 1]
-  ) {
-    lettersArray[k - 1].style.color = "black";
-    k--;
+  if (event.key === "Backspace") {
+    if (skip > 0) {
+      skip--;
+    } else if (k > 0 && completeText[k - 1] === textSplitArray[k - 1]) {
+      car.style.left = parseInt(car.style.left) - steps + "px";
+      lettersArray[k - 1].style.color = "black";
+      completeText = completeText.slice(0, -1);
+      k--;
+    }
   }
-  // if (
-  //   event.key === "Backspace" &&
-  //   completeText[k - 2] === textSplitArray[k - 2]
-  // ) {
-  //
-  //
-  // }
-
-  // console.log(k);
 });
 
-// text = "mere";
-//1) Cand introduc o litera egala cu cea din array atunci vreau sa colorez litera.
-//2) Cand stergem litera span ul sa isi schimbe culoarea la cea initiala.
-//3) Sa verificam ca atunci cand introducem litere care nu sunt corecte sa nu se intample nimic
+tryAgain.addEventListener("click", () => {
+  title.style.display = "none";
+  tryAgain.style.display = "none";
+  textArea.style.display = "flex";
+  gameText.style.display = "block";
+  car.style.display = "flex";
+  h2.style.display = "flex";
+  timer.innerHTML = "0";
+  x = true;
+  textArea.value = "";
+  for (let i = 0; i < lettersArray.length; i++) {
+    lettersArray[i].style.color = "black";
+  }
+});
